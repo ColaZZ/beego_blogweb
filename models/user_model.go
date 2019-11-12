@@ -14,9 +14,9 @@ type User struct {
 }
 
 // 插入用户
-func InertUser(user User) (int64, error) {
-	return utils.ModifyDB("insert into users(username,pasword,status,creattime values(?,?,?,?)",
-		user.Username, user.Password, user.Status, user.Createtime)
+func InsertUser(user User)(int64, error){
+	return utils.ModifyDB("insert into users(username,password,status,createtime) values (?,?,?,?)",
+		user.Username,user.Password,user.Status,user.Createtime)
 }
 
 // 按条件查询,返回id

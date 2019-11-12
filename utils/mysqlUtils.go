@@ -15,8 +15,6 @@ func InitMysql() {
 	dsn := "root:0312@tcp(127.0.0.1:3306)/myblogweb"
 	db, _ = sqlx.Connect("mysql", dsn)
 
-	str := MD5("11")
-	fmt.Println(str)
 	//db.SetMaxOpenConns(100)
 	db.SetMaxIdleConns(16)
 

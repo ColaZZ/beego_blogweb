@@ -38,7 +38,7 @@ func (c *RegisterController) Post() {
 	fmt.Println("MD5加密后", password)
 
 	user := models.User{0, username, password, 0, time.Now().Unix()}
-	_, err := models.InertUser(user)
+	_, err := models.InsertUser(user)
 	if err != nil {
 		c.Data["json"] = map[string]interface{}{"code": 0, "message": "注册失败"}
 	} else {
