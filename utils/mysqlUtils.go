@@ -3,8 +3,8 @@ package utils
 import (
 	_ "database/sql"
 	"fmt"
-	"github.com/jmoiron/sqlx"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/jmoiron/sqlx"
 	"log"
 )
 
@@ -19,17 +19,7 @@ func InitMysql() {
 	db.SetMaxIdleConns(16)
 
 	CreateTableWithUser()
-}
-
-func CreateTableWithUser() {
-	sqlStr := `CREATE TABLE IF NOT EXISTS users(
-		id INT(4) PRIMARY KEY AUTO_INCREMENT NOT NULL,
-		username VARCHAR(64),
-		password VARCHAR(64),
-		status INT(4),
-		createtime INT(10)
-		);`
-	_, _ = ModifyDB(sqlStr)
+	CreateTableWithArticle()
 }
 
 // 操作数据库（返回row affected)
@@ -52,4 +42,27 @@ func QueryRowDB(sqlStr string) *sqlx.Row {
 	return db.QueryRowx(sqlStr)
 }
 
+func CreateTableWithUser() {
+	sqlStr := `CREATE TABLE IF NOT EXISTS users(
+		id INT(4) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+		username VARCHAR(64),
+		password VARCHAR(64),
+		status INT(4),
+		createtime INT(10)
+		);`
+	_, _ = ModifyDB(sqlStr)
+}
 
+//创建文章表
+func CreateTableWithArticle() {
+	sql := `create table if not exists article(
+        id int(4) primary key auto_increment not null,
+        title varchar(30),
+        author varchar(20),
+        tags varchar(30),
+        short varchar(255),
+        content longtext,
+        createtime int(10)
+        );`
+	_, _ = ModifyDB(sql)
+}
