@@ -22,7 +22,6 @@ func InsertUser(user User)(int64, error){
 // 按条件查询,返回id
 func QueryUserWightCon(con string) int {
 	sqlStr := fmt.Sprintf("select id from users %s", con)
-	fmt.Println(sqlStr)
 	row := utils.QueryRowDB(sqlStr)
 	id := 0
 	_ = row.Scan(&id)
@@ -32,5 +31,11 @@ func QueryUserWightCon(con string) int {
 // 根据用户名查询ID
 func QueryUserWithUsername(username string) int {
 	sqlStr := fmt.Sprintf("where username = %s", username)
+	return QueryUserWightCon(sqlStr)
+}
+
+// 根据用户名密码查询id
+func QueryUserWithParam(username, password string) int {
+	sqlStr := fmt.Sprintf("where username=%s and password=%s", username, password)
 	return QueryUserWightCon(sqlStr)
 }
