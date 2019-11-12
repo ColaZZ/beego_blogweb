@@ -21,6 +21,8 @@ func (c *LoginContoller) Post () {
 	password = utils.MD5(password)
 	id := models.QueryUserWithParam(username, password)
 	if id > 0 {
+		//登录成功，set session
+		c.SetSession("loginuser", username)
 		c.Data["json"] = map[string]interface{}{"code":1, "message":"登录成功"}
 	} else {
 		c.Data["json"] = map[string]interface{}{"code":0, "messsage":"登录失败"}
