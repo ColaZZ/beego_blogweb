@@ -4,24 +4,40 @@ import (
 	_ "database/sql"
 	"fmt"
 	"github.com/jmoiron/sqlx"
+	_ "github.com/go-sql-driver/mysql"
 	"log"
 )
 
 var db *sqlx.DB
 
 func InitMysql() {
-	fmt.Println("init mysql...")
-	if db == nil {
-		db, _ := sqlx.Open("mysql", "root:0312@tcp(127.0.0.1:3306)/myblogweb")
-		db.SetMaxOpenConns(100)
-		db.SetMaxIdleConns(16)
-		CreateTableWithUser()
-	}
+	fmt.Println("InitMysql...")
+	dsn := "root:0312@tcp(127.0.0.1:3306)/myblogweb"
+	db, _ = sqlx.Connect("mysql", dsn)
+
+	str := MD5("11")
+	fmt.Println(str)
+	//db.SetMaxOpenConns(100)
+	db.SetMaxIdleConns(16)
+
+	CreateTableWithUser()
+}
+
+func CreateTableWithUser() {
+	sqlStr := `CREATE TABLE IF NOT EXISTS users(
+		id INT(4) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+		username VARCHAR(64),
+		password VARCHAR(64),
+		status INT(4),
+		createtime INT(10)
+		);`
+	_, _ = ModifyDB(sqlStr)
 }
 
 // 操作数据库（返回row affected)
-func ModifyDB(sqlStr string, args ...interface{}) (int64, error) {
-	result, err := db.Exec(sqlStr)
+// 执行sql的exec语句
+func ModifyDB(sql string, args ...interface{}) (int64, error) {
+	result, err := db.Exec(sql, args...)
 	if err != nil {
 		log.Println(err)
 		return 0, err
@@ -38,15 +54,4 @@ func QueryRowDB(sqlStr string) *sqlx.Row {
 	return db.QueryRowx(sqlStr)
 }
 
-// 创建用户表
-func CreateTableWithUser() {
-	sql := `CREATE TABLE IF NOT EXISTS users(
-		id INT(4) PRIMARY KEY AUTO_INCREMENT NOT NULL,
-		username VARCHAR(64),
-		password VARCHAR(64),
-		status INT(4),
-		createtime INT(10)
-		);`
-	_, _ = ModifyDB(sql)
-}
 
