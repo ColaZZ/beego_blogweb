@@ -20,6 +20,7 @@ func InitMysql() {
 
 	CreateTableWithUser()
 	CreateTableWithArticle()
+	CreateTableWithAlbum()
 }
 
 // 操作数据库（返回row affected)
@@ -69,4 +70,16 @@ func CreateTableWithArticle() {
         createtime int(10)
         );`
 	_, _ = ModifyDB(sql)
+}
+
+//--------图片--------
+func CreateTableWithAlbum() {
+	sql := `create table if not exists album(
+        id int(4) primary key auto_increment not null,
+        filepath varchar(255),
+        filename varchar(64),
+        status int(4),
+        createtime int(10)
+        );`
+	ModifyDB(sql)
 }

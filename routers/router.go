@@ -28,4 +28,9 @@ func init() {
 
     //标签功能
     beego.Router("/tags", &controllers.TagsController{})
+
+    //相册
+    beego.Router("/album", &controllers.AlbumController{})
+    //上传
+    beego.Router("/upload", &controllers.UploadController{})
 }
