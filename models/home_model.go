@@ -4,6 +4,7 @@ import (
 	"beego_blogweb/utils"
 	"bytes"
 	"fmt"
+	"github.com/astaxie/beego"
 	"html/template"
 	"strconv"
 	"strings"
@@ -29,6 +30,14 @@ type HomeBlockParam struct {
 type TagLink struct {
 	TagName string
 	TagUrl  string
+}
+
+type HomeFooterPageCode struct {
+	HasPre   bool
+	HasNext  bool
+	ShowPage string
+	PreLink  string
+	NextLink string
 }
 
 func MakeHomeBlocks(artList []Article, isLogin bool) template.HTML {
@@ -63,4 +72,32 @@ func createTagsLinks(tags string) []TagLink {
 		tagLink = append(tagLink, TagLink{tag, "/?tag=" + tags})
 	}
 	return tagLink
+}
+
+func ConfigHomeFooterPageCode(page int) HomeFooterPageCode {
+	pageCode := HomeFooterPageCode{}
+	//查询出总的条数
+	num := GetArticleRowsNum()
+	pageRow, _ := beego.AppConfig.Int("articleListPageNum")
+	//计算总页数
+	allPageNum := (num-1) / pageRow + 1
+
+	pageCode.ShowPage = fmt.Sprintf("%d/%d", page, allPageNum)
+
+	//当前页数小于等于1，name上一页的按钮不能点击
+	if page < 1 {
+		pageCode.HasPre = false
+	} else {
+		pageCode.HasPre = true
+	}
+
+	//当前页数大于等于总页数，name下一页不能点击
+	if page >= allPageNum {
+		pageCode.HasNext = false
+	} else {
+		pageCode.HasNext = true
+	}
+	pageCode.PreLink = "/?page=" + strconv.Itoa(page-1)
+	pageCode.PreLink = "/?page=" + strconv.Itoa(page+1)
+	return pageCode
 }

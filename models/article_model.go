@@ -18,6 +18,7 @@ type Article struct {
 
 func AddArticle(article Article) (int64, error) {
 	i, err := insertArticle(article)
+	SetArticleRowsNum()
 	return i, err
 }
 
@@ -54,7 +55,7 @@ func QueryArticlesWithCon(sqlStr string) ([]Article, error) {
 		author := ""
 		var createtime int64
 		createtime = 0
-		_ := rows.Scan(&id, &title, &tags, &short, &content, &author, createtime)
+		_ = rows.Scan(&id, &title, &tags, &short, &content, &author, createtime)
 		art := Article{
 			Id:         id,
 			Title:      title,
@@ -67,4 +68,28 @@ func QueryArticlesWithCon(sqlStr string) ([]Article, error) {
 		articleList = append(articleList, art)
 	}
 	return articleList, nil
+}
+
+//存储表的行数，只有自己可以更改，当文章新增或者删除时需要更新这个值
+var artcileRowsNum = 0
+
+//只有首次获取行数的时候采取统计表里的行数
+func GetArticleRowsNum() int {
+	if artcileRowsNum == 0 {
+		artcileRowsNum = QueryArticleRowNum()
+	}
+	return artcileRowsNum
+}
+
+//查询文章的总条数
+func QueryArticleRowNum() int {
+	row := utils.QueryRowDB("select count(id) from article")
+	num := 0
+	_ = row.Scan(&num)
+	return num
+}
+
+// 设置页数
+func SetArticleRowsNum() {
+	artcileRowsNum = QueryArticleRowNum()
 }

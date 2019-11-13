@@ -16,7 +16,7 @@ func (c *HomeController) Get() {
 	}
 	var articleList []models.Article
 	articleList, _ = models.FindArticleWithPage(page)
-	c.Data["PageCode"] = 1
+	c.Data["PageCode"] = models.ConfigHomeFooterPageCode(page)
 	c.Data["HasFooter"] = true
 	c.Data["Content"] = models.MakeHomeBlocks(articleList, c.IsLogin)
 
