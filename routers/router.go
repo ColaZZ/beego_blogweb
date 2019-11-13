@@ -33,4 +33,7 @@ func init() {
     beego.Router("/album", &controllers.AlbumController{})
     //上传
     beego.Router("/upload", &controllers.UploadController{})
+
+    //关于我
+	beego.Router("/aboutme", &controllers.AboutMeController{})
 }
