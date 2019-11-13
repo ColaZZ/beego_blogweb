@@ -152,3 +152,13 @@ func QueryArticleWithParam(param string) []string {
 	}
 	return paramList
 }
+
+//按照指定的标签搜索
+func QueryArticlesWithTag(tag string) ([]Article, error) {
+	sql := " where tags like '%&" + tag + "&%'"
+	sql += " or tags like '%&" + tag + "'"
+	sql += " or tags like '" + tag + "&%'"
+	sql += " or tags like '" + tag + "'"
+
+	return QueryArticlesWithCon(sql)
+}
