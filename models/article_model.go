@@ -123,3 +123,15 @@ func UpdateArticle(article Article) (int64, error) {
 	return utils.ModifyDB("update article set title=?,tags=?,short=?,content=? where id=?",
 		article.Title, article.Tags, article.Short, article.Content, article.Id)
 }
+
+//删除文章
+func DeleteArticle(artID int) (int64, error) {
+	i, err := deleteArticleWithArtId(artID)
+	SetArticleRowsNum()
+	return i, err
+}
+
+//按articleID删除文章
+func deleteArticleWithArtId(artID int) (int64, error) {
+	return utils.ModifyDB("delete from article where id=?", artID)
+}
