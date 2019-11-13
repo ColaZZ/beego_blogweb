@@ -42,6 +42,10 @@ func QueryRowDB(sqlStr string) *sqlx.Row {
 	return db.QueryRowx(sqlStr)
 }
 
+func QueryDB(sqlStr string) (*sqlx.Rows, error) {
+	return db.Queryx(sqlStr)
+}
+
 func CreateTableWithUser() {
 	sqlStr := `CREATE TABLE IF NOT EXISTS users(
 		id INT(4) PRIMARY KEY AUTO_INCREMENT NOT NULL,
