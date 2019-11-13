@@ -4,6 +4,7 @@ import (
 	"beego_blogweb/utils"
 	"fmt"
 	"github.com/astaxie/beego"
+	"strconv"
 )
 
 type Article struct {
@@ -92,4 +93,27 @@ func QueryArticleRowNum() int {
 // 设置页数
 func SetArticleRowsNum() {
 	artcileRowsNum = QueryArticleRowNum()
+}
+
+//获取id所对应的文章信息
+func QueryArticleWithId(id int) Article {
+	row := utils.QueryRowDB("select id,title,tags,short,content,author,creatime from article where id=" + strconv.Itoa(id))
+	title := ""
+	tags := ""
+	short := ""
+	content := ""
+	author := ""
+	var createtime int64
+	createtime = 0
+	_ = row.Scan(&id, &title, &tags, &short, &content, &author, &createtime)
+	art := Article{
+		Id:         id,
+		Title:      title,
+		Tags:       tags,
+		Short:      short,
+		Content:    content,
+		Author:     author,
+		CreateTime: createtime,
+	}
+	return art
 }
