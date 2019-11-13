@@ -7,11 +7,11 @@ import (
 	"strconv"
 )
 
-type ShowAritcleController struct {
+type ShowArticleController struct {
 	beego.Controller
 }
 
-func (c *ShowAritcleController) Get () {
+func (c *ShowArticleController) Get () {
 	idStr := c.Ctx.Input.Param("id")
 	id, _ := strconv.Atoi(idStr)
 
