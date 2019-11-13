@@ -25,4 +25,7 @@ func init() {
 	beego.Router("/article/update", &controllers.UpdateArticleController{})
     //删除文章
     beego.Router("/article/delete", &controllers.DeleteArticleController{})
+
+    //标签功能
+    beego.Router("/tags", &controllers.TagsController{})
 }

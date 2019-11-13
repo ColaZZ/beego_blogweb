@@ -4,6 +4,7 @@ import (
 	"beego_blogweb/utils"
 	"fmt"
 	"github.com/astaxie/beego"
+	"log"
 	"strconv"
 )
 
@@ -134,4 +135,20 @@ func DeleteArticle(artID int) (int64, error) {
 //按articleID删除文章
 func deleteArticleWithArtId(artID int) (int64, error) {
 	return utils.ModifyDB("delete from article where id=?", artID)
+}
+
+//查询所有的(参数)
+func QueryArticleWithParam(param string) []string {
+	rows, err := utils.QueryDB(fmt.Sprintf("select %s from article", param))
+	if err != nil {
+		log.Println(err)
+	}
+
+	var paramList []string
+	for rows.Next() {
+		tag := ""
+		rows.Scan(&tag)
+		paramList = append(paramList, tag)
+	}
+	return paramList
 }
